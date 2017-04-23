@@ -11,6 +11,7 @@ import {
   StyleSheet,
 } from 'react-native';
 import { TabViewAnimated, TabViewPagerPan } from 'react-native-tab-view';
+import type { NavigationState } from 'react-native-tab-view/types';
 
 const styles = StyleSheet.create({
   container: {
@@ -60,7 +61,13 @@ const initialLayout = {
   width: Dimensions.get('window').width,
 };
 
-export default class CoverflowExample extends Component {
+type Route = {
+  key: string,
+};
+
+type State = NavigationState<Route>;
+
+export default class CoverflowExample extends Component<void, *, State> {
   static title = 'Coverflow';
   static appbarElevation = 0;
 
@@ -68,7 +75,7 @@ export default class CoverflowExample extends Component {
     style: View.propTypes.style,
   };
 
-  state = {
+  state: State = {
     index: 2,
     routes: Object.keys(ALBUMS).map(key => ({ key })),
   };

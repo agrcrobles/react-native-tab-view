@@ -25,14 +25,14 @@ const styles = StyleSheet.create({
   },
 });
 
-type Props = SceneRendererProps & {
+type Props<T> = SceneRendererProps<T> & {
   swipeEnabled?: boolean,
   animationEnabled?: boolean,
   children?: any,
 };
 
-export default class TabViewPagerAndroid
-  extends PureComponent<void, Props, void> {
+export default class TabViewPagerAndroid<T>
+  extends PureComponent<void, Props<T>, void> {
   static propTypes = {
     ...SceneRendererPropType,
     swipeEnabled: PropTypes.bool,
@@ -45,7 +45,7 @@ export default class TabViewPagerAndroid
     this._jumpListener = this.props.subscribe('jump', this._handleJump);
   }
 
-  componentWillReceiveProps(nextProps: Props) {
+  componentWillReceiveProps(nextProps: Props<T>) {
     if (
       this.props.layout !== nextProps.layout ||
       Children.count(this.props.children) !== Children.count(nextProps.children)

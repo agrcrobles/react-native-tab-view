@@ -15,17 +15,19 @@ const styles = StyleSheet.create({
   },
 });
 
-type DefaultProps = {
-  renderPager: (props: SceneRendererProps) => React.Element<*>,
+type DefaultProps<T> = {
+  renderPager: (props: SceneRendererProps<T>) => React.Element<*>,
 };
 
-type Props = TransitionerProps & {
-  renderPager: (props: SceneRendererProps) => React.Element<*>,
-  renderScene: (props: SceneRendererProps & Scene) => ?React.Element<*>,
-  renderHeader?: (props: SceneRendererProps) => ?React.Element<*>,
-  renderFooter?: (props: SceneRendererProps) => ?React.Element<*>,
+type RenderProps<T> = {
+  renderPager: (props: SceneRendererProps<T>) => React.Element<*>,
+  renderScene: (props: SceneRendererProps<T> & Scene<T>) => ?React.Element<*>,
+  renderHeader?: (props: SceneRendererProps<T>) => ?React.Element<*>,
+  renderFooter?: (props: SceneRendererProps<T>) => ?React.Element<*>,
   lazy?: boolean,
 };
+
+type Props<T> = TransitionerProps<T> & RenderProps<T>;
 
 type State = {
   loaded: Array<number>,
@@ -45,8 +47,8 @@ switch (Platform.OS) {
     break;
 }
 
-export default class TabViewAnimated
-  extends PureComponent<DefaultProps, Props, State> {
+export default class TabViewAnimated<T>
+  extends PureComponent<DefaultProps<T>, Props<T>, State> {
   static propTypes = {
     navigationState: NavigationStatePropType.isRequired,
     renderPager: PropTypes.func.isRequired,
@@ -58,10 +60,10 @@ export default class TabViewAnimated
   };
 
   static defaultProps = {
-    renderPager: (props: SceneRendererProps) => <TabViewPager {...props} />,
+    renderPager: (props: SceneRendererProps<T>) => <TabViewPager {...props} />,
   };
 
-  constructor(props: Props) {
+  constructor(props: Props<T>) {
     super(props);
 
     this.state = {
@@ -71,8 +73,9 @@ export default class TabViewAnimated
 
   state: State;
 
-  _renderScene = (props: SceneRendererProps & Scene) => {
-    const { renderScene, navigationState, lazy } = this.props;
+  _renderScene = (props: SceneRendererProps<T>) => {
+    const { renderScene, lazy } = this.props;
+    const { navigationState } = props;
     const { loaded } = this.state;
     if (lazy) {
       if (loaded.includes(navigationState.routes.indexOf(props.route))) {
@@ -83,7 +86,7 @@ export default class TabViewAnimated
     return renderScene(props);
   };
 
-  _renderItems = (props: SceneRendererProps) => {
+  _renderItems = (props: SceneRendererProps<T>) => {
     const {
       navigationState: _,
       configureTransition,

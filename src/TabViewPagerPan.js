@@ -12,7 +12,6 @@ import {
 } from 'react-native';
 import { SceneRendererPropType } from './TabViewPropTypes';
 import type { SceneRendererProps } from './TabViewTypeDefinitions';
-import type { GestureEvent, GestureState } from './PanResponderTypes';
 
 const styles = StyleSheet.create({
   sheet: {
@@ -22,12 +21,39 @@ const styles = StyleSheet.create({
   },
 });
 
+type GestureEvent = {
+  nativeEvent: {
+    changedTouches: Array<*>,
+    identifier: number,
+    locationX: number,
+    locationY: number,
+    pageX: number,
+    pageY: number,
+    target: number,
+    timestamp: number,
+    touches: Array<*>,
+  },
+};
+
+type GestureState = {
+  stateID: number,
+  moveX: number,
+  moveY: number,
+  x0: number,
+  y0: number,
+  dx: number,
+  dy: number,
+  vx: number,
+  vy: number,
+  numberActiveTouches: number,
+};
+
 type DefaultProps = {
   swipeDistanceThreshold: number,
   swipeVelocityThreshold: number,
 };
 
-type Props = SceneRendererProps & {
+type Props<T> = SceneRendererProps<T> & {
   swipeEnabled?: boolean,
   swipeDistanceThreshold: number,
   swipeVelocityThreshold: number,
@@ -36,8 +62,8 @@ type Props = SceneRendererProps & {
 
 const DEAD_ZONE = 12;
 
-export default class TabViewPagerPan
-  extends PureComponent<DefaultProps, Props, void> {
+export default class TabViewPagerPan<T>
+  extends PureComponent<DefaultProps, Props<T>, void> {
   static propTypes = {
     ...SceneRendererPropType,
     swipeEnabled: PropTypes.bool,

@@ -28,7 +28,7 @@
   ],
 
   "settings": {
-    "import/core-modules": [ "react-native-tab-view" ]
+    "import/core-modules": [ "react-native-tab-view", "react-native-tab-view/types" ]
   },
 
   "rules": {

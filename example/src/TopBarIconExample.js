@@ -2,8 +2,9 @@
 
 import React, { Component } from 'react';
 import { View, StyleSheet } from 'react-native';
-import { TabViewAnimated, TabBar } from 'react-native-tab-view';
 import { Ionicons } from '@expo/vector-icons';
+import { TabViewAnimated, TabBar } from 'react-native-tab-view';
+import type { NavigationState, Scene } from 'react-native-tab-view/types';
 
 const styles = StyleSheet.create({
   container: {
@@ -22,7 +23,14 @@ const styles = StyleSheet.create({
   },
 });
 
-export default class TopBarIconExample extends Component {
+type Route = {
+  key: string,
+  icon: string,
+};
+
+type State = NavigationState<Route>;
+
+export default class TopBarIconExample extends Component<void, *, State> {
   static title = 'Icon only top bar';
   static appbarElevation = 0;
 
@@ -30,7 +38,7 @@ export default class TopBarIconExample extends Component {
     style: View.propTypes.style,
   };
 
-  state = {
+  state: State = {
     index: 0,
     routes: [
       { key: '1', icon: 'md-restaurant' },
@@ -45,7 +53,7 @@ export default class TopBarIconExample extends Component {
     });
   };
 
-  _renderIcon = ({ route }: any) => {
+  _renderIcon = ({ route }: Scene<Route>) => {
     return <Ionicons name={route.icon} size={24} color="white" />;
   };
 
@@ -60,7 +68,7 @@ export default class TopBarIconExample extends Component {
     );
   };
 
-  _renderScene = ({ route }) => {
+  _renderScene = ({ route }: Scene<Route>) => {
     switch (route.key) {
       case '1':
         return <View style={[styles.page, { backgroundColor: '#ff4081' }]} />;

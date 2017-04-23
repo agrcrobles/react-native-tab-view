@@ -4,6 +4,7 @@ import React, { Component } from 'react';
 import { Animated, View, StyleSheet } from 'react-native';
 import { TabViewAnimated, TabBar } from 'react-native-tab-view';
 import ListViewExample from './ListViewExample';
+import type { NavigationState } from 'react-native-tab-view/types';
 
 const styles = StyleSheet.create({
   container: {
@@ -29,7 +30,14 @@ const styles = StyleSheet.create({
   },
 });
 
-export default class TopBarTextExample extends Component {
+type Route = {
+  key: string,
+  title: string,
+};
+
+type State = NavigationState<Route>;
+
+export default class TopBarTextExample extends Component<void, *, State> {
   static title = 'Scroll views';
   static backgroundColor = '#fff';
   static tintColor = '#222';
@@ -39,7 +47,7 @@ export default class TopBarTextExample extends Component {
     style: View.propTypes.style,
   };
 
-  state = {
+  state: State = {
     index: 0,
     routes: [
       { key: '1', title: 'First' },
@@ -75,7 +83,7 @@ export default class TopBarTextExample extends Component {
     }
   };
 
-  _renderLabel = (props: any) => ({ route, index }) => {
+  _renderLabel = props => ({ route, index }) => {
     const inputRange = props.navigationState.routes.map((x, i) => i);
     const outputRange = inputRange.map(
       inputIndex => (inputIndex === index ? '#D6356C' : '#222'),

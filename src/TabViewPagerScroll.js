@@ -26,13 +26,13 @@ const styles = StyleSheet.create({
   },
 });
 
-type Props = SceneRendererProps & {
+type Props<T> = SceneRendererProps<T> & {
   swipeEnabled?: boolean,
   children?: any,
 };
 
-export default class TabViewPagerScroll
-  extends PureComponent<void, Props, void> {
+export default class TabViewPagerScroll<T>
+  extends PureComponent<void, Props<T>, void> {
   static propTypes = {
     ...SceneRendererPropType,
     swipeEnabled: PropTypes.bool,
@@ -47,7 +47,7 @@ export default class TabViewPagerScroll
     );
   }
 
-  componentDidUpdate(prevProps: Props) {
+  componentDidUpdate(prevProps: Props<T>) {
     if (
       prevProps.layout !== this.props.layout ||
       Children.count(prevProps.children) !== Children.count(this.props.children)

@@ -11,6 +11,11 @@ import {
 import { TabViewAnimated } from 'react-native-tab-view';
 import { Ionicons } from '@expo/vector-icons';
 import ListViewExample from './ListViewExample';
+import type {
+  NavigationState,
+  Scene,
+  SceneRendererProps,
+} from 'react-native-tab-view/types';
 
 const AnimatedIcon = Animated.createAnimatedComponent(Ionicons);
 
@@ -58,7 +63,15 @@ const styles = StyleSheet.create({
   },
 });
 
-export default class TopBarIconExample extends Component {
+type Route = {
+  key: string,
+  title: string,
+  icon: string,
+};
+
+type State = NavigationState<Route>;
+
+export default class TopBarIconExample extends Component<void, *, State> {
   static title = 'No animation';
   static backgroundColor = '#f4f4f4';
   static tintColor = '#222';
@@ -68,7 +81,7 @@ export default class TopBarIconExample extends Component {
     style: View.propTypes.style,
   };
 
-  state = {
+  state: State = {
     index: 0,
     routes: [
       { key: '1', title: 'Featured', icon: 'ios-star' },
@@ -85,7 +98,13 @@ export default class TopBarIconExample extends Component {
     });
   };
 
-  _renderLabel = ({ position, navigationState }) => ({ route, index }) => {
+  _renderLabel = ({
+    position,
+    navigationState,
+  }: SceneRendererProps<Route>) => ({
+    route,
+    index,
+  }: { route: Route, index: number }) => {
     const inputRange = navigationState.routes.map((x, i) => i);
     const outputRange = inputRange.map(
       inputIndex => (inputIndex === index ? '#2196f3' : '#939393'),
@@ -101,7 +120,10 @@ export default class TopBarIconExample extends Component {
     );
   };
 
-  _renderIcon = ({ navigationState, position }) => ({ route, index }: any) => {
+  _renderIcon = ({ navigationState, position }: SceneRendererProps<Route>) => ({
+    route,
+    index,
+  }: { route: Route, index: number }) => {
     const inputRange = navigationState.routes.map((x, i) => i);
     const filledOpacity = position.interpolate({
       inputRange,
@@ -127,7 +149,7 @@ export default class TopBarIconExample extends Component {
     );
   };
 
-  _renderFooter = props => {
+  _renderFooter = (props: SceneRendererProps<Route>) => {
     return (
       <View style={styles.tabbar}>
         {props.navigationState.routes.map((route, index) => {

@@ -19,10 +19,12 @@ type DefaultProps = {
   initialLayout: Layout,
 };
 
-type Props = TransitionerProps & {
-  render: (props: SceneRendererProps) => ?React.Element<*>,
+type RenderProps<T> = {
+  render: (props: SceneRendererProps<T>) => ?React.Element<*>,
   style?: any,
 };
+
+type Props<T> = TransitionerProps<T> & RenderProps<T>;
 
 type State = {
   layout: Layout & {
@@ -37,8 +39,8 @@ const DefaultTransitionSpec = {
   friction: 35,
 };
 
-export default class TabViewTransitioner
-  extends PureComponent<DefaultProps, Props, State> {
+export default class TabViewTransitioner<T>
+  extends PureComponent<DefaultProps, Props<T>, State> {
   static propTypes = {
     navigationState: NavigationStatePropType.isRequired,
     render: PropTypes.func.isRequired,
@@ -61,7 +63,7 @@ export default class TabViewTransitioner
     },
   };
 
-  constructor(props: Props) {
+  constructor(props: Props<T>) {
     super(props);
 
     this.state = {
@@ -82,7 +84,7 @@ export default class TabViewTransitioner
     );
   }
 
-  componentDidUpdate(prevProps: Props) {
+  componentDidUpdate(prevProps: Props<T>) {
     if (prevProps.navigationState.index !== this.props.navigationState.index) {
       this._transitionTo(this.props.navigationState.index);
     }
@@ -135,7 +137,7 @@ export default class TabViewTransitioner
     });
   };
 
-  _buildSceneRendererProps = (): SceneRendererProps => {
+  _buildSceneRendererProps = (): SceneRendererProps<T> => {
     return {
       layout: this.state.layout,
       navigationState: this.props.navigationState,

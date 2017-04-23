@@ -2,8 +2,9 @@
 
 import React, { Component } from 'react';
 import { Animated, View, Text, StyleSheet } from 'react-native';
-import { TabViewAnimated, TabBar } from 'react-native-tab-view';
 import { Ionicons } from '@expo/vector-icons';
+import { TabViewAnimated, TabBar } from 'react-native-tab-view';
+import type { NavigationState } from 'react-native-tab-view/types';
 
 const styles = StyleSheet.create({
   container: {
@@ -49,7 +50,15 @@ const styles = StyleSheet.create({
   },
 });
 
-export default class TopBarIconExample extends Component {
+type Route = {
+  key: string,
+  title: string,
+  icon: string,
+};
+
+type State = NavigationState<Route>;
+
+export default class TopBarIconExample extends Component<void, *, State> {
   static title = 'Bottom bar with indicator';
   static appbarElevation = 4;
 
@@ -57,7 +66,7 @@ export default class TopBarIconExample extends Component {
     style: View.propTypes.style,
   };
 
-  state = {
+  state: State = {
     index: 0,
     routes: [
       { key: '1', title: 'First', icon: 'ios-speedometer' },
@@ -86,7 +95,7 @@ export default class TopBarIconExample extends Component {
     );
   };
 
-  _renderIcon = ({ route }: any) => {
+  _renderIcon = ({ route }) => {
     return <Ionicons name={route.icon} size={24} style={styles.icon} />;
   };
 
