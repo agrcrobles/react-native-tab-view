@@ -50,7 +50,7 @@ export default class TabViewTransitioner
       width: PropTypes.number.isRequired,
     }),
     canJumpToTab: PropTypes.func,
-    style: View.propTypes.style,
+    style: PropTypes.object,
   };
 
   static defaultProps = {
